@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malaysia Athlete Database — National Sports Registry</title>
+<meta name="description" content="The official database for Malaysian athletes across football, athletics, swimming, squash, badminton, karate, taekwondo and hockey.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MALAYSIA ATHLETE DATABASE — DESIGN TOKENS v2
+   Concept: a stadium ticket / athlete ID card system. Deep
+   floodlit stadium night, halftone print texture like a match
+   program, and a colour code per sport (like federation kit
+   colours) instead of one flat palette for everything.
+   ============================================================ */
+
+:root {
+  --navy-950: #0a1420;
+  --navy-900: #0e1c2c;
+  --navy-800: #152a3f;
+  --navy-700: #1e3a54;
+  --line-navy: #2c4a68;
+  --red: #ce1126;
+  --red-dim: #a30d1e;
+  --gold: #ffc72c;
+  --gold-dim: #e0a800;
+  --gold-text: #9c6b06;
+  --off-white: #fffdf8;
+  --paper: #faf6ea;
+  --paper-line: #e6dcc4;
+  --tint: #f0f4f8;
+  --tint-line: #dbe4ee;
+  --ink: #171f2b;
+  --ink-soft: #5c6472;
+
+  --c-football: #2e8b57;
+  --c-athletics: #d5372e;
+  --c-swimming: #1d9bf0;
+  --c-squash: #8b5cf6;
+  --c-badminton: #e0a800;
+  --c-karate: #e2622b;
+  --c-taekwondo: #8892a3;
+  --c-hockey: #14b8a6;
+
+  --font-display: "Anton", "Arial Narrow", sans-serif;
+  --font-body: "Work Sans", "Segoe UI", sans-serif;
+  --font-mono: "Space Mono", monospace;
+
+  --container: 1180px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--off-white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--gold); color: var(--navy-950); }
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+
+.wrap {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+}
+
+.halftone {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(23, 31, 43, 0.06) 1px, transparent 1.3px);
+  background-size: 15px 15px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 20%, #000 40%, transparent 90%);
+}
+.on-dark .halftone, .cta-band .halftone { background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1.3px); }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+}
+.eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--red); display: inline-block; }
+.on-dark .eyebrow { color: var(--gold); }
+.on-dark .eyebrow::before { background: var(--gold); }
+
+.site-nav { position: sticky; top: 0; z-index: 100; background: rgba(255, 253, 248, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--paper-line); }
+.nav-inner { max-width: var(--container); margin: 0 auto; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+.brand { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); color: var(--ink); font-size: 20px; letter-spacing: 0.02em; cursor: pointer; }
+.brand-mark { width: 34px; height: 34px; border-radius: 8px; background: linear-gradient(135deg, var(--red) 0%, var(--red-dim) 100%); display: grid; place-items: center; font-family: var(--font-display); font-size: 15px; color: var(--off-white); flex-shrink: 0; }
+.brand small { display: block; font-family: var(--font-mono); font-size: 10px; color: var(--gold-text); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+.nav-links { display: flex; align-items: center; gap: 6px; }
+.nav-links a { font-family: var(--font-body); font-weight: 600; font-size: 14.5px; color: var(--ink-soft); padding: 10px 16px; border-radius: 999px; transition: color 0.15s ease, background 0.15s ease; cursor: pointer; }
+.nav-links a:hover { color: var(--ink); background: var(--tint); }
+.nav-links a.active { color: var(--navy-950); background: var(--gold); }
+.nav-cta { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; background: var(--red); color: var(--off-white) !important; padding: 10px 18px !important; border-radius: 999px !important; margin-left: 6px; }
+.nav-cta:hover { background: var(--red-dim) !important; }
+.nav-cta.active { background: var(--gold) !important; color: var(--navy-950) !important; }
+
+.btn { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.03em; padding: 15px 26px; border-radius: 999px; border: none; cursor: pointer; }
+.btn-primary { background: var(--red); color: var(--off-white); }
+.btn-primary:hover { background: var(--red-dim); }
+.btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--paper-line); }
+.btn-ghost:hover { border-color: var(--red); color: var(--red); }
+.on-dark .btn-ghost, .cta-band.on-dark .btn-ghost { color: var(--off-white); border-color: var(--line-navy); }
+.on-dark .btn-ghost:hover, .cta-band.on-dark .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+.btn-dark { background: var(--navy-950); color: var(--off-white); }
+.btn-dark:hover { background: var(--navy-800); }
+.btn-arrow { transition: transform 0.15s ease; }
+.btn:hover .btn-arrow { transform: translateX(3px); }
+
+.hero {
+  position: relative;
+  background: radial-gradient(ellipse 90% 70% at 22% -10%, rgba(206, 17, 38, 0.09), transparent 55%),
+              radial-gradient(ellipse 70% 60% at 100% 10%, rgba(255, 199, 44, 0.18), transparent 60%),
+              var(--off-white);
+  color: var(--ink);
+  overflow: hidden;
+  padding: 96px 0 0;
+}
+.hero-glow { position: absolute; width: 480px; height: 480px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 199, 44, 0.22), transparent 70%); top: -140px; right: -80px; pointer-events: none; }
+.hero-inner { position: relative; max-width: var(--container); margin: 0 auto; padding: 0 28px 110px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 50px; align-items: center; }
+.hero h1 { font-family: var(--font-display); font-size: clamp(44px, 6.2vw, 80px); line-height: 0.96; letter-spacing: 0.01em; margin: 10px 0 22px; text-transform: uppercase; }
+.hero h1 .accent { color: var(--red); }
+.hero p.lede { font-size: 18px; line-height: 1.6; color: var(--ink-soft); max-width: 46ch; margin: 0 0 34px; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.hero-stats { display: flex; gap: 28px; margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--paper-line); flex-wrap: wrap; }
+.stat b { display: block; font-family: var(--font-display); font-size: 34px; color: var(--red); }
+.stat span { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+
+.id-card-stage { position: relative; display: grid; place-items: center; padding: 10px; }
+.id-card { position: relative; width: 100%; max-width: 360px; background: linear-gradient(160deg, var(--navy-800), var(--navy-950)); border: 1px solid var(--navy-700); border-radius: 20px; padding: 26px 26px 22px; transform: rotate(-4deg); box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5); }
+.id-card::before { content: ""; position: absolute; inset: 0; border-radius: 20px; background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1.3px); background-size: 12px 12px; pointer-events: none; }
+.id-card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; position: relative; }
+.id-card-head .fed { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; color: var(--gold); text-transform: uppercase; }
+.id-card-head .fed span { display: block; color: #91a0bd; font-size: 9.5px; margin-top: 2px; letter-spacing: 0.08em; }
+.id-card-photo { width: 100%; aspect-ratio: 16/10; border-radius: 12px; background: linear-gradient(135deg, var(--red), var(--red-dim)); display: grid; place-items: center; font-family: var(--font-display); font-size: 54px; color: rgba(247, 243, 232, 0.92); margin-bottom: 18px; position: relative; overflow: hidden; }
+.id-card-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(0, 0, 0, 0.35)); }
+.id-card-name { font-family: var(--font-display); font-size: 22px; text-transform: uppercase; letter-spacing: 0.01em; margin-bottom: 4px; position: relative; }
+.id-card-role { font-family: var(--font-mono); font-size: 11.5px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 18px; position: relative; }
+.id-card-barcode { height: 30px; background: repeating-linear-gradient(90deg, var(--off-white) 0 2px, transparent 2px 5px, var(--off-white) 5px 6px, transparent 6px 10px); border-radius: 4px; opacity: 0.85; }
+.id-card-foot { display: flex; justify-content: space-between; margin-top: 10px; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.08em; color: #91a0bd; text-transform: uppercase; position: relative; }
+.id-card-tag { position: absolute; top: -16px; left: 24px; background: var(--gold); color: var(--navy-950); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; padding: 7px 14px; border-radius: 999px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); z-index: 2; }
+
+section { padding: 100px 0; position: relative; }
+.section-tight { padding: 76px 0; }
+.section-head { max-width: 640px; margin-bottom: 52px; }
+.section-head h2 { font-family: var(--font-display); font-size: clamp(32px, 4vw, 48px); text-transform: uppercase; line-height: 1.02; margin: 12px 0 16px; }
+.section-head p { font-size: 16.5px; line-height: 1.65; color: var(--ink-soft); }
+.on-navy { background: var(--tint); color: var(--ink); border-top: 1px solid var(--tint-line); border-bottom: 1px solid var(--tint-line); }
+.on-navy .section-head p { color: var(--ink-soft); }
+.on-paper { background: var(--paper); }
+.on-dark { background: var(--navy-950); color: var(--off-white); }
+.on-dark .section-head p { color: #b7c1d9; }
+
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--tint-line); border-radius: 16px; overflow: hidden; box-shadow: 0 1px 0 var(--tint-line); }
+.feature-card { background: var(--off-white); padding: 32px 28px; }
+.feature-card .num { font-family: var(--font-mono); color: var(--red); font-size: 12px; letter-spacing: 0.08em; }
+.feature-card h3 { font-family: var(--font-display); font-size: 21px; text-transform: uppercase; margin: 14px 0 10px; letter-spacing: 0.01em; color: var(--ink); }
+.feature-card p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; margin: 0; }
+
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 8px; }
+.step { border-left: 3px solid var(--gold); padding-left: 18px; }
+.step .step-num { font-family: var(--font-display); font-size: 30px; color: var(--red); }
+.step h4 { font-family: var(--font-body); font-weight: 700; font-size: 15.5px; margin: 6px 0 6px; color: var(--ink); }
+.step p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+
+.sport-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.sport-card { --accent: var(--gold); background: var(--off-white); color: var(--ink); border-radius: 16px; padding: 0; position: relative; overflow: hidden; border: 1px solid var(--paper-line); box-shadow: 0 1px 3px rgba(23, 31, 43, 0.05); transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.sport-card:hover { transform: translateY(-6px) rotate(-0.6deg); box-shadow: 0 20px 34px rgba(23, 31, 43, 0.14); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+.sport-card .accent-bar { height: 6px; width: 100%; background: var(--accent); display: block; }
+.sport-card .card-body { padding: 24px 22px 22px; position: relative; }
+.sport-card .card-body::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(23, 31, 43, 0.035) 1px, transparent 1.3px); background-size: 13px 13px; mask-image: radial-gradient(circle at 100% 100%, #000 0%, transparent 60%); pointer-events: none; }
+.sport-card .lane-badge { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: color-mix(in srgb, var(--accent) 75%, #10151f 25%); text-transform: uppercase; margin-bottom: 22px; display: block; position: relative; }
+.sport-card .icon-chip { width: 46px; height: 46px; border-radius: 12px; background: color-mix(in srgb, var(--accent) 16%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); display: grid; place-items: center; font-size: 22px; margin-bottom: 14px; position: relative; }
+.sport-card h3 { font-family: var(--font-display); font-size: 22px; text-transform: uppercase; margin: 0 0 8px; letter-spacing: 0.01em; position: relative; color: var(--ink); }
+.sport-card p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin: 0; position: relative; }
+.sport-card .fed-tag { position: relative; display: inline-block; margin-top: 14px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; color: color-mix(in srgb, var(--accent) 75%, #10151f 25%); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); padding: 4px 10px; border-radius: 999px; }
+
+.cta-band { background: linear-gradient(120deg, var(--red) 0%, var(--red-dim) 100%); color: var(--off-white); border-radius: 20px; padding: 56px 48px; display: flex; align-items: center; justify-content: space-between; gap: 30px; flex-wrap: wrap; position: relative; overflow: hidden; }
+.cta-band .halftone { mask-image: radial-gradient(ellipse 70% 90% at 90% 10%, #000 30%, transparent 80%); }
+.cta-band h2 { font-family: var(--font-display); font-size: clamp(26px, 3.4vw, 38px); text-transform: uppercase; margin: 0 0 8px; position: relative; }
+.cta-band p { margin: 0; color: #ffd9de; font-size: 15px; max-width: 46ch; position: relative; }
+.cta-band .btn-primary { background: var(--navy-950); position: relative; }
+.cta-band .btn-primary:hover { background: var(--navy-800); }
+.cta-band.on-dark { background: linear-gradient(120deg, var(--navy-800), var(--navy-950)); }
+.cta-band.on-dark p { color: #b7c1d9; }
+
+.register-hero { background: radial-gradient(ellipse 80% 70% at 50% 0%, rgba(255, 199, 44, 0.2), transparent 60%), var(--off-white); color: var(--ink); padding: 110px 0 90px; text-align: center; position: relative; overflow: hidden; }
+.register-card { max-width: 620px; margin: -70px auto 0; background: var(--off-white); border: 1px solid var(--paper-line); border-radius: 20px; padding: 44px 40px; box-shadow: 0 30px 60px rgba(23, 31, 43, 0.12); position: relative; z-index: 2; }
+.register-card::before, .register-card::after { content: ""; position: absolute; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; border-radius: 50%; background: var(--paper); border: 1px solid var(--paper-line); }
+.register-card::before { left: -13px; }
+.register-card::after { right: -13px; }
+.register-card .lane-num-big { font-family: var(--font-display); font-size: 15px; color: var(--red); letter-spacing: 0.1em; }
+.register-card h2 { font-family: var(--font-display); font-size: 30px; text-transform: uppercase; margin: 10px 0 14px; }
+.register-card p { color: var(--ink-soft); font-size: 15px; line-height: 1.65; margin: 0 0 26px; }
+.checklist { list-style: none; padding: 0; margin: 0 0 30px; display: grid; gap: 12px; }
+.checklist li { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; color: var(--ink); }
+.checklist li::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--gold-dim); margin-top: 6px; flex-shrink: 0; }
+.register-form-btn { width: 100%; justify-content: center; padding: 18px 26px; font-size: 15px; }
+.register-note { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-soft); text-align: center; margin-top: 18px; }
+.perforation { height: 1px; background-image: repeating-linear-gradient(90deg, var(--paper-line) 0 8px, transparent 8px 16px); margin: 0 -40px 26px; }
+
+footer { background: var(--navy-950); color: #91a0bd; padding: 56px 0 30px; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; padding-bottom: 36px; border-bottom: 1px solid var(--navy-700); }
+.footer-grid h5 { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin: 0 0 16px; }
+.footer-grid a, .footer-grid p { display: block; font-size: 14px; color: #b7c1d9; margin-bottom: 9px; line-height: 1.5; cursor: pointer; }
+.footer-grid a:hover { color: var(--off-white); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 22px; font-family: var(--font-mono); font-size: 12px; flex-wrap: wrap; gap: 10px; }
+
+/* ---------- page routing ---------- */
+.page { display: none; }
+.page.active { display: block; }
+
+@media (max-width: 980px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .feature-grid { grid-template-columns: 1fr 1fr; }
+  .sport-grid { grid-template-columns: 1fr 1fr; }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .id-card { max-width: 320px; margin: 0 auto; }
+}
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .sport-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+  .cta-band { flex-direction: column; align-items: flex-start; }
+  .register-card { margin: -50px 16px 0; padding: 32px 24px; }
+  .perforation { margin: 0 -24px 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* ---------- language switch ---------- */
+.lang-switch { display: flex; align-items: center; background: var(--tint); border: 1px solid var(--tint-line); border-radius: 999px; padding: 3px; margin-left: 6px; }
+.lang-btn { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; padding: 7px 13px; border-radius: 999px; border: none; background: transparent; color: var(--ink-soft); cursor: pointer; }
+.lang-btn.active { background: var(--navy-950); color: var(--off-white); }
+@media (max-width: 720px) { .lang-switch { margin-left: auto; } }
+
+/* ---------- certificate price box ---------- */
+.price-box { display: flex; align-items: center; gap: 16px; background: var(--tint); border: 1px solid var(--tint-line); border-radius: 14px; padding: 18px 22px; margin: 0 0 26px; }
+.price-box .price-amount { font-family: var(--font-display); font-size: 34px; color: var(--red); line-height: 1; }
+.price-box .price-label { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+.certify-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.certify-actions .btn { flex: 1; justify-content: center; min-width: 180px; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" data-page="home" onclick="goTo('home')">
+      <span class="brand-mark">MY</span>
+      <span><span data-i18n="brand_title">Malaysia Athlete Talent Hub</span><small data-i18n="brand_sub">Malaysia Sports Registry</small></span>
+    </a>
+    <div class="nav-links">
+      <a data-page="home" data-i18n="nav_home" onclick="goTo('home')">Home</a>
+      <a data-page="about" data-i18n="nav_about" onclick="goTo('about')">About System</a>
+      <a data-page="sports" data-i18n="nav_sports" onclick="goTo('sports')">Sports Categories</a>
+      <a data-page="certify" data-i18n="nav_certify" onclick="goTo('certify')">Certify</a>
+      <a data-page="update" data-i18n="nav_update" onclick="goTo('update')">Update Performance</a>
+      <a data-page="register" class="nav-cta" data-i18n="nav_register" onclick="goTo('register')">Register Now</a>
+      <div class="lang-switch">
+        <button class="lang-btn active" data-lang="en" onclick="applyLang('en')">EN</button>
+        <button class="lang-btn" data-lang="ms" onclick="applyLang('ms')">BM</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HOME ============ -->
+<main id="page-home" class="page active">
+  <header class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow" data-i18n="home_eyebrow">National Athlete Database</p>
+        <h1 data-i18n-html="home_h1">Every Athlete.<br>One Official<br><span class="accent">Record.</span></h1>
+        <p class="lede" data-i18n="home_lede">Register, track and manage your sporting profile in one central system — from the school field to the international arena. Built for athletes, coaches and national sports associations.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" onclick="goTo('register')"><span data-i18n="nav_register">Register Now</span> <span class="btn-arrow">→</span></a>
+          <a class="btn btn-ghost" data-i18n="btn_how" onclick="goTo('about')">How It Works</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat"><b>8</b><span data-i18n="stat_sports">Sports Categories</span></div>
+          <div class="stat"><b>16</b><span data-i18n="stat_states">States &amp; Federal Territories</span></div>
+          <div class="stat"><b>01</b><span data-i18n="stat_system">Central System</span></div>
+        </div>
+      </div>
+
+      <div class="id-card-stage">
+        <div class="id-card">
+          <span class="id-card-tag" data-i18n="idcard_tag">Registration Open</span>
+          <div class="id-card-head">
+            <div class="fed" data-i18n-html="idcard_fed">Athlete ID<span>Malaysia Sports Registry</span></div>
+            <div class="fed" style="text-align:right;" data-i18n-html="idcard_season">2026<span>Season</span></div>
+          </div>
+          <div class="id-card-photo">MY</div>
+          <div class="id-card-name" data-i18n="idcard_name">Your Name Here</div>
+          <div class="id-card-role" data-i18n="idcard_role">Category · Selected on registration</div>
+          <div class="id-card-barcode"></div>
+          <div class="id-card-foot"><span data-i18n="idcard_no">No. 000-0000</span><span data-i18n="idcard_verified">Verified</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="on-navy section-tight">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="home_about_eyebrow">About the System</p>
+        <h2 data-i18n="home_about_h2">One System, Every Level of Sport.</h2>
+        <p data-i18n="home_about_p">Malaysia Athlete Database stores profiles, achievement records and registration status in one platform accessible to sports associations, coaches and state sports authorities.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="num">01</span>
+          <h3 data-i18n="f1_h3">Central Profile</h3>
+          <p data-i18n="f1_p">Every athlete holds one official profile across sports categories, competition levels and performance history.</p>
+        </div>
+        <div class="feature-card">
+          <span class="num">02</span>
+          <h3 data-i18n="f2_h3">Verified Records</h3>
+          <p data-i18n="f2_p">Data is reviewed and confirmed by the relevant governing body before it enters the official database.</p>
+        </div>
+        <div class="feature-card">
+          <span class="num">03</span>
+          <h3 data-i18n="f3_h3">Connected Access</h3>
+          <p data-i18n="f3_p">Associations and coaches can search and check athlete status by category and by state.</p>
+        </div>
+      </div>
+      <div style="text-align:right; margin-top:24px;">
+        <a class="btn btn-ghost" onclick="goTo('about')"><span data-i18n="btn_readmore">Read More About the System</span> <span class="btn-arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="home_sports_eyebrow">Sports Categories</p>
+        <h2 data-i18n="home_sports_h2">Eight Lanes. Eight Sports.</h2>
+        <p data-i18n="home_sports_p">Each sport is colour-coded and carries its own registration lane — pick your category and start your athlete record.</p>
+      </div>
+      <div class="sport-grid">
+        <div class="sport-card" style="--accent: var(--c-football);"><span class="accent-bar"></span><div class="card-body"><span class="lane-badge" data-i18n="lane01">Lane 01</span><span class="icon-chip">⚽</span><h3 data-i18n="sport_football">Football</h3><p data-i18n="football_short">School leagues to the national squad.</p></div></div>
+        <div class="sport-card" style="--accent: var(--c-athletics);"><span class="accent-bar"></span><div class="card-body"><span class="lane-badge" data-i18n="lane02">Lane 02</span><span class="icon-chip">🏃</span><h3 data-i18n="sport_athletics">Athletics</h3><p data-i18n="athletics_short">Track, field and distance events.</p></div></div>
+        <div class="sport-card" style="--accent: var(--c-swimming);"><span class="accent-bar"></span><div class="card-body"><span class="lane-badge" data-i18n="lane03">Lane 03</span><span class="icon-chip">🏊</span><h3 data-i18n="sport_swimming">Swimming</h3><p data-i18n="swimming_short">Pool and open-water aquatic events.</p></div></div>
+        <div class="sport-card" style="--accent: var(--c-squash);"><span class="accent-bar"></span><div class="card-body"><span class="lane-badge" data-i18n="lane04">Lane 04</span><span class="icon-chip">🎾</span><h3 data-i18n="sport_squash">Squash</h3><p data-i18n="squash_short">Singles and team indoor-court play.</p></div></div>
+        <div class="sport-card" style="--accent: var(--c-badminton);"><span class="accent-bar"></span><div class="card-body"><span class="lane-badge" data-i18n="lane05">Lane 05</span><span class="icon-chip">🏸</span><h3 data-i18n="sport_badminton">Badminton</h3><p data-i18n="badminton_short">Singles, doubles and team events.</p></div></div>
+        <div class="sport-card" style="--accent: var(--c-karate);"><span class="accent-bar"></span><div class="card-body"><span class="lane-badge" data-i18n="lane06">Lane 06</span><span class="icon-chip">🥋</span><h3 data-i18n="sport_karate">Karate</h3><p data-i18n="karate_short">Kumite and kata, all age groups.</p></div></div>
+        <div class="sport-card" style="--accent: var(--c-taekwondo);"><span class="accent-bar"></span><div class="card-body"><span class="lane-badge" data-i18n="lane07">Lane 07</span><span class="icon-chip">🥊</span><h3 data-i18n="sport_taekwondo">Taekwondo</h3><p data-i18n="taekwondo_short">Poomsae and competitive sparring.</p></div></div>
+        <div class="sport-card" style="--accent: var(--c-hockey);"><span class="accent-bar"></span><div class="card-body"><span class="lane-badge" data-i18n="lane08">Lane 08</span><span class="icon-chip">🏑</span><h3 data-i18n="sport_hockey">Hockey</h3><p data-i18n="hockey_short">Full field and indoor formats.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="on-paper">
+    <div class="wrap">
+      <div class="cta-band">
+        <div class="halftone"></div>
+        <div>
+          <h2 data-i18n="cta_home_h2">Ready to Get on Record?</h2>
+          <p data-i18n="cta_home_p">Registration takes less than 5 minutes. Fill in the official form and our team will verify your profile.</p>
+        </div>
+        <a class="btn btn-primary" onclick="goTo('register')"><span data-i18n="nav_register">Register Now</span> <span class="btn-arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ ABOUT ============ -->
+<main id="page-about" class="page">
+  <header class="hero" style="padding-bottom: 70px;">
+    <div class="hero-glow"></div>
+    <div class="wrap" style="position:relative; padding-top:40px;">
+      <p class="eyebrow" data-i18n="about_hero_eyebrow">About the System</p>
+      <h1 style="font-size:clamp(36px,5vw,58px); max-width:16ch; margin:10px 0 20px;" data-i18n-html="about_hero_h1">Built to Record<br><span class="accent">Every Step</span> an Athlete Takes.</h1>
+      <p class="lede" style="max-width:60ch;" data-i18n="about_hero_lede">Malaysia Athlete Database is a central registry that connects athletes, coaches, sports schools and national governing bodies in one verified, searchable record.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="about_why_eyebrow">Why This System Exists</p>
+        <h2 data-i18n="about_why_h2">One Official Record, Not Scattered Files.</h2>
+        <p data-i18n="about_why_p">Athlete records used to be spread across paper forms, association spreadsheets and separate school systems. This system brings it all together — so an athlete's performance and achievements don't get lost between levels.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="num">01</span>
+          <h3 data-i18n="fa1_h3">For Athletes</h3>
+          <p data-i18n="fa1_p">Keep one profile for your entire sporting career — from school level, to state, to national.</p>
+        </div>
+        <div class="feature-card">
+          <span class="num">02</span>
+          <h3 data-i18n="fa2_h3">For Coaches</h3>
+          <p data-i18n="fa2_p">Check an athlete's record and readiness before team selection or programme placement.</p>
+        </div>
+        <div class="feature-card">
+          <span class="num">03</span>
+          <h3 data-i18n="fa3_h3">For Associations</h3>
+          <p data-i18n="fa3_p">Access structured data by sport category, state and competition level for talent planning.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="on-paper">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="about_obj_eyebrow">System Objectives</p>
+        <h2 data-i18n="about_obj_h2">What This System Aims to Do.</h2>
+        <p data-i18n="about_obj_p">Beyond record-keeping, the database is built around a set of clear goals for athletes, coaches and associations.</p>
+      </div>
+      <ul class="checklist" style="max-width:760px;">
+        <li data-i18n="obj1">Provide every athlete with one official, verified profile for their entire career.</li>
+        <li data-i18n="obj2">Give coaches and associations a reliable way to check athlete status and readiness.</li>
+        <li data-i18n="obj3">Track performance and achievements consistently from school level to international level.</li>
+        <li data-i18n-html="obj4"><strong>To promote the athlete to teams and coaches</strong> — helping athletes market their talent to potential recruiters.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="on-navy">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="about_how_eyebrow">How It Works</p>
+        <h2 data-i18n="about_how_h2">Four Steps Into the Database.</h2>
+        <p data-i18n="about_how_p">Registration is designed to be simple — from filling in the form to your record being verified and active in the system.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="step-num">01</span><h4 data-i18n="s1_h4">Submit Registration</h4><p data-i18n="s1_p">Complete the online form with your personal details and sports category.</p></div>
+        <div class="step"><span class="step-num">02</span><h4 data-i18n="s2_h4">Association Review</h4><p data-i18n="s2_p">The relevant governing body reviews and confirms the submitted information.</p></div>
+        <div class="step"><span class="step-num">03</span><h4 data-i18n="s3_h4">Profile Activated</h4><p data-i18n="s3_p">Your record is officially entered into the national database.</p></div>
+        <div class="step"><span class="step-num">04</span><h4 data-i18n="s4_h4">Ongoing Updates</h4><p data-i18n="s4_p">Your achievements and status are kept current throughout your career.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="on-paper">
+    <div class="wrap">
+      <div class="cta-band">
+        <div class="halftone"></div>
+        <div>
+          <h2 data-i18n="cta_about_h2">Start Your Record Today</h2>
+          <p data-i18n="cta_about_p">Register and become part of Malaysia's official athlete database.</p>
+        </div>
+        <a class="btn btn-primary" onclick="goTo('register')"><span data-i18n="nav_register">Register Now</span> <span class="btn-arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ SPORTS ============ -->
+<main id="page-sports" class="page">
+  <header class="hero" style="padding-bottom: 70px;">
+    <div class="hero-glow"></div>
+    <div class="wrap" style="position:relative; padding-top:40px;">
+      <p class="eyebrow" data-i18n="sports_hero_eyebrow">Sports Categories</p>
+      <h1 style="font-size:clamp(36px,5vw,58px); max-width:18ch; margin:10px 0 20px;" data-i18n-html="sports_hero_h1">Eight Official Lanes<br><span class="accent">for Malaysian Athletes.</span></h1>
+      <p class="lede" style="max-width:60ch;" data-i18n="sports_hero_lede">Every sport carries its own colour-coded lane, aligned to its governing body. Pick your category to begin registration.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="sport-grid">
+
+        <div class="sport-card" style="--accent: var(--c-football);">
+          <span class="accent-bar"></span>
+          <div class="card-body">
+            <span class="lane-badge" data-i18n="lane01">Lane 01</span>
+            <span class="icon-chip">⚽</span>
+            <h3 data-i18n="sport_football">Football</h3>
+            <p data-i18n="football_long">Player records from school leagues and state teams through to the national squad — positions, clubs and match history.</p>
+            <span class="fed-tag">FAM</span>
+          </div>
+        </div>
+
+        <div class="sport-card" style="--accent: var(--c-athletics);">
+          <span class="accent-bar"></span>
+          <div class="card-body">
+            <span class="lane-badge" data-i18n="lane02">Lane 02</span>
+            <span class="icon-chip">🏃</span>
+            <h3 data-i18n="sport_athletics">Athletics</h3>
+            <p data-i18n="athletics_long">Covers track, field and distance events — from the 100m sprint to marathon and road-race disciplines.</p>
+            <span class="fed-tag">MAF</span>
+          </div>
+        </div>
+
+        <div class="sport-card" style="--accent: var(--c-swimming);">
+          <span class="accent-bar"></span>
+          <div class="card-body">
+            <span class="lane-badge" data-i18n="lane03">Lane 03</span>
+            <span class="icon-chip">🏊</span>
+            <h3 data-i18n="sport_swimming">Swimming</h3>
+            <p data-i18n="swimming_long">Times, strokes and achievements for aquatic athletes, from school pools to national championships.</p>
+            <span class="fed-tag">ASN</span>
+          </div>
+        </div>
+
+        <div class="sport-card" style="--accent: var(--c-squash);">
+          <span class="accent-bar"></span>
+          <div class="card-body">
+            <span class="lane-badge" data-i18n="lane04">Lane 04</span>
+            <span class="icon-chip">🎾</span>
+            <h3 data-i18n="sport_squash">Squash</h3>
+            <p data-i18n="squash_long">Profiles for singles and team players, including rankings and indoor-court tournament entries.</p>
+            <span class="fed-tag">SRAM</span>
+          </div>
+        </div>
+
+        <div class="sport-card" style="--accent: var(--c-badminton);">
+          <span class="accent-bar"></span>
+          <div class="card-body">
+            <span class="lane-badge" data-i18n="lane05">Lane 05</span>
+            <span class="icon-chip">🏸</span>
+            <h3 data-i18n="sport_badminton">Badminton</h3>
+            <p data-i18n="badminton_long">Covers singles, doubles and team events — from academy level through to the national squad.</p>
+            <span class="fed-tag">BAM</span>
+          </div>
+        </div>
+
+        <div class="sport-card" style="--accent: var(--c-karate);">
+          <span class="accent-bar"></span>
+          <div class="card-body">
+            <span class="lane-badge" data-i18n="lane06">Lane 06</span>
+            <span class="icon-chip">🥋</span>
+            <h3 data-i18n="sport_karate">Karate</h3>
+            <p data-i18n="karate_long">Records for kumite and kata athletes by age group and competitive weight class.</p>
+            <span class="fed-tag">MAKAF</span>
+          </div>
+        </div>
+
+        <div class="sport-card" style="--accent: var(--c-taekwondo);">
+          <span class="accent-bar"></span>
+          <div class="card-body">
+            <span class="lane-badge" data-i18n="lane07">Lane 07</span>
+            <span class="icon-chip">🥊</span>
+            <h3 data-i18n="sport_taekwondo">Taekwondo</h3>
+            <p data-i18n="taekwondo_long">Covers poomsae and sparring (kyorugi) events by weight class and belt level.</p>
+            <span class="fed-tag">TAM</span>
+          </div>
+        </div>
+
+        <div class="sport-card" style="--accent: var(--c-hockey);">
+          <span class="accent-bar"></span>
+          <div class="card-body">
+            <span class="lane-badge" data-i18n="lane08">Lane 08</span>
+            <span class="icon-chip">🏑</span>
+            <h3 data-i18n="sport_hockey">Hockey</h3>
+            <p data-i18n="hockey_long">Player records for full-field and indoor hockey, including position and team history.</p>
+            <span class="fed-tag">MHC</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="on-paper">
+    <div class="wrap">
+      <div class="cta-band">
+        <div class="halftone"></div>
+        <div>
+          <h2 data-i18n="cta_sports_h2">Found Your Lane?</h2>
+          <p data-i18n="cta_sports_p">Register now and select your sports category in the official registration form.</p>
+        </div>
+        <a class="btn btn-primary" onclick="goTo('register')"><span data-i18n="nav_register">Register Now</span> <span class="btn-arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ REGISTER ============ -->
+<main id="page-register" class="page">
+  <header class="register-hero">
+    <div class="halftone"></div>
+    <div class="wrap" style="position:relative;">
+      <p class="eyebrow" style="justify-content:center;" data-i18n="register_hero_eyebrow">Athlete Registration</p>
+      <h1 style="font-family:var(--font-display); font-size:clamp(34px,5vw,56px); text-transform:uppercase; margin:10px 0 14px;" data-i18n="register_hero_h1">Claim Your Lane.</h1>
+      <p class="lede" style="margin:0 auto; text-align:center;" data-i18n="register_hero_lede">You'll be taken to the official registration form to complete your athlete details.</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="register-card">
+      <span class="lane-num-big" data-i18n="register_card_lane">REGISTRATION LANE</span>
+      <h2 data-i18n="register_card_h2">Register as an Athlete</h2>
+      <div class="perforation"></div>
+      <p data-i18n="register_card_p">Registration is handled through the official Google Form. Have the following ready before you start:</p>
+
+      <ul class="checklist">
+        <li data-i18n="register_checklist1">Full name &amp; identification card number</li>
+        <li data-i18n="register_checklist2">Sports category (Football, Athletics, Swimming, Squash, Badminton, Karate, Taekwondo or Hockey)</li>
+        <li data-i18n="register_checklist3">Level of Participation (Local, State, Country &amp; International)</li>
+        <li data-i18n="register_checklist4">Contact details &amp; coach information (if applicable)</li>
+      </ul>
+
+      <a href="https://forms.gle/tdjQ18cWPfhDfeGP6" data-href-en="https://forms.gle/tdjQ18cWPfhDfeGP6" data-href-ms="https://forms.gle/hd6dgLzJuvoaXJiC6" target="_blank" rel="noopener" class="btn btn-primary register-form-btn">
+        <span data-i18n="register_btn">Open Registration Form</span> <span class="btn-arrow">→</span>
+      </a>
+      <p class="register-note" data-i18n="register_note">Form opens in a new tab · Google Forms</p>
+    </div>
+  </div>
+
+  <section style="padding-top:70px;">
+    <div class="wrap">
+      <div class="section-head" style="margin:0 auto; text-align:center;">
+        <p class="eyebrow" style="justify-content:center;" data-i18n="register_next_eyebrow">After You Submit</p>
+        <h2 data-i18n="register_next_h2">What Happens Next?</h2>
+      </div>
+      <div class="steps" style="grid-template-columns:repeat(3,1fr);">
+        <div class="step"><span class="step-num">01</span><h4 data-i18n="rn_s1_h4">Review</h4><p data-i18n="rn_s1_p">The relevant governing body reviews the information submitted.</p></div>
+        <div class="step"><span class="step-num">02</span><h4 data-i18n="rn_s2_h4">Confirmation</h4><p data-i18n="rn_s2_p">You'll be contacted by email or phone for verification.</p></div>
+        <div class="step"><span class="step-num">03</span><h4 data-i18n="rn_s3_h4">Active Profile</h4><p data-i18n="rn_s3_p">Your athlete record is officially entered into the database.</p></div>
+      </div>
+
+      <div class="cta-band on-dark" style="margin-top:56px;">
+        <div class="halftone"></div>
+        <div>
+          <h2 style="color:var(--gold);" data-i18n="cta_reg_h2">Already Registered?</h2>
+          <p data-i18n-html="cta_reg_p">Update your latest performance and achievements anytime — this step is <strong>optional</strong>, not required.</p>
+        </div>
+        <a class="btn btn-ghost" onclick="goTo('update')"><span data-i18n="btn_update_performance">Update Performance</span> <span class="btn-arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ UPDATE PERFORMANCE ============ -->
+<main id="page-update" class="page">
+  <header class="register-hero">
+    <div class="halftone"></div>
+    <div class="wrap" style="position:relative;">
+      <p class="eyebrow" style="justify-content:center;" data-i18n="update_hero_eyebrow">For Registered Athletes</p>
+      <h1 style="font-family:var(--font-display); font-size:clamp(34px,5vw,56px); text-transform:uppercase; margin:10px 0 14px;" data-i18n-html="update_hero_h1">Update Your<br><span class="accent">Performance.</span></h1>
+      <p class="lede" style="margin:0 auto; text-align:center;" data-i18n-html="update_hero_lede">Competed recently or hit a new milestone? Add it to your record — this step is <strong style="color:var(--gold-text);">optional</strong>, not required.</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="register-card">
+      <span class="lane-num-big" style="color:var(--gold-text);" data-i18n="update_card_lane">OPTIONAL · NOT REQUIRED</span>
+      <h2 data-i18n="update_card_h2">Update Performance Record</h2>
+      <div class="perforation"></div>
+      <p data-i18n-html="update_card_p">This form is for athletes who are <strong>already registered</strong> in the Malaysia Athlete Database and want to add competition results, achievements, or recent progress to an existing profile.</p>
+
+      <ul class="checklist">
+        <li data-i18n="update_checklist1">Competition / tournament name &amp; date</li>
+        <li data-i18n="update_checklist2">Result or achievement (time, score, ranking, medal)</li>
+      </ul>
+
+      <a href="https://forms.gle/mBuv47HDsSFnE8yw6" target="_blank" rel="noopener" class="btn btn-primary register-form-btn">
+        <span data-i18n="update_btn">Open Update Form</span> <span class="btn-arrow">→</span>
+      </a>
+      <p class="register-note" data-i18n="update_note">Form opens in a new tab · Google Forms</p>
+    </div>
+  </div>
+
+  <section style="padding-top:70px;">
+    <div class="wrap">
+      <div class="section-head" style="margin:0 auto; text-align:center; max-width:560px;">
+        <p class="eyebrow" style="justify-content:center;" data-i18n="update_notreg_eyebrow">Not Registered Yet?</p>
+        <h2 data-i18n="update_notreg_h2">Register First, Then Update</h2>
+        <p data-i18n="update_notreg_p">The performance update form is only useful once you have an official profile in the system. Not registered yet? Start here.</p>
+      </div>
+      <div style="text-align:center;">
+        <a class="btn btn-dark" onclick="goTo('register')"><span data-i18n="nav_register">Register Now</span> <span class="btn-arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ CERTIFY ============ -->
+<main id="page-certify" class="page">
+  <header class="register-hero">
+    <div class="halftone"></div>
+    <div class="wrap" style="position:relative;">
+      <p class="eyebrow" style="justify-content:center;" data-i18n="certify_hero_eyebrow">Athlete Certification</p>
+      <h1 style="font-family:var(--font-display); font-size:clamp(34px,5vw,56px); text-transform:uppercase; margin:10px 0 14px;" data-i18n="certify_hero_h1">Get Certified.</h1>
+      <p class="lede" style="margin:0 auto; text-align:center;" data-i18n="certify_hero_lede">Official athlete certificates are issued after verification. Contact us to request yours.</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="register-card">
+      <span class="lane-num-big" data-i18n="certify_card_lane">CERTIFICATION LANE</span>
+      <h2 data-i18n="certify_card_h2">Request Your Certificate</h2>
+      <div class="perforation"></div>
+      <p data-i18n="certify_card_p">Certificates are issued directly by our team, not through an online form. To request one, call or email us with your registered athlete details. Each certificate costs RM50, payable upon verification.</p>
+
+      <div class="price-box">
+        <span class="price-amount">RM50</span>
+        <span class="price-label" data-i18n="price_label">Per Certificate</span>
+      </div>
+
+      <ul class="checklist">
+        <li data-i18n="certify_checklist1">Full name &amp; athlete registration number</li>
+        <li data-i18n="certify_checklist2">Sports category &amp; level of participation</li>
+        <li data-i18n="certify_checklist3">Purpose of certificate (team trial, scholarship, record, etc.)</li>
+      </ul>
+
+      <div class="certify-actions">
+        <a href="tel:+60312345678" class="btn btn-primary">
+          <span data-i18n="certify_call_btn">Call to Request</span> <span class="btn-arrow">→</span>
+        </a>
+        <a href="mailto:certify@athletedb.my" class="btn btn-ghost">
+          <span data-i18n="certify_email_btn">Email Us</span> <span class="btn-arrow">→</span>
+        </a>
+      </div>
+      <p class="register-note" data-i18n="certify_note">Certificates are issued after phone/email verification · RM50 per certificate</p>
+    </div>
+  </div>
+
+  <section style="padding-top:70px;">
+    <div class="wrap">
+      <div class="section-head" style="margin:0 auto; text-align:center;">
+        <p class="eyebrow" style="justify-content:center;" data-i18n="certify_how_eyebrow">How to Get Certified</p>
+        <h2 data-i18n="certify_how_h2">Four Simple Steps.</h2>
+      </div>
+      <div class="steps" style="grid-template-columns:repeat(4,1fr);">
+        <div class="step"><span class="step-num">01</span><h4 data-i18n="c_s1_h4">Contact Us</h4><p data-i18n="c_s1_p">Call or email our team with your athlete details and the certificate you need.</p></div>
+        <div class="step"><span class="step-num">02</span><h4 data-i18n="c_s2_h4">Verification</h4><p data-i18n="c_s2_p">We verify your registration and performance record before approving the request.</p></div>
+        <div class="step"><span class="step-num">03</span><h4 data-i18n="c_s3_h4">Payment (RM50)</h4><p data-i18n="c_s3_p">A fee of RM50 is payable per certificate once your request is verified.</p></div>
+        <div class="step"><span class="step-num">04</span><h4 data-i18n="c_s4_h4">Receive Certificate</h4><p data-i18n="c_s4_p">Your official certificate is issued and sent to you after payment is confirmed.</p></div>
+      </div>
+
+      <div class="cta-band on-dark" style="margin-top:56px;">
+        <div class="halftone"></div>
+        <div>
+          <h2 style="color:var(--gold);" data-i18n="certify_cta_h2">Not Registered Yet?</h2>
+          <p data-i18n="certify_cta_p">You need an active athlete profile before requesting a certificate.</p>
+        </div>
+        <a class="btn btn-ghost" onclick="goTo('register')"><span data-i18n="nav_register">Register Now</span> <span class="btn-arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h5 data-i18n="brand_title">Malaysia Athlete Talent Hub</h5>
+        <p style="cursor:default;" data-i18n="footer_about_p">A central athlete database supporting national sports development across eight major sports categories.</p>
+      </div>
+      <div>
+        <h5 data-i18n="footer_links_h5">Links</h5>
+        <a onclick="goTo('home')" data-i18n="nav_home">Home</a>
+        <a onclick="goTo('about')" data-i18n="footer_link_about">About the System</a>
+        <a onclick="goTo('sports')" data-i18n="nav_sports">Sports Categories</a>
+        <a onclick="goTo('certify')" data-i18n="nav_certify">Certify</a>
+        <a onclick="goTo('update')" data-i18n="nav_update">Update Performance</a>
+        <a onclick="goTo('register')" data-i18n="nav_register">Register Now</a>
+      </div>
+      <div>
+        <h5 data-i18n="footer_contact_h5">Contact</h5>
+        <a href="mailto:info@athletedb.my" style="cursor:pointer;">info@athletedb.my</a>
+        <p style="cursor:default;" data-i18n="footer_contact_addr">Ministry of Youth &amp; Sports, Putrajaya</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-i18n="footer_bottom_left">© 2026 Malaysia Athlete Database</span>
+      <span data-i18n="footer_bottom_right">Built for National Sport</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function goTo(pageId) {
+    document.querySelectorAll('.page').forEach(function (p) { p.classList.remove('active'); });
+    var target = document.getElementById('page-' + pageId);
+    if (target) target.classList.add('active');
+
+    document.querySelectorAll('[data-page]').forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('data-page') === pageId);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    if (history.pushState) history.pushState(null, '', '#' + pageId);
+  }
+
+  function routeFromHash() {
+    var id = (location.hash || '#home').replace('#', '');
+    var valid = ['home', 'about', 'sports', 'certify', 'register', 'update'];
+    goTo(valid.indexOf(id) !== -1 ? id : 'home');
+  }
+
+  window.addEventListener('popstate', routeFromHash);
+  routeFromHash();
+
+  /* ============================================================
+     BILINGUAL SUPPORT — English / Bahasa Melayu
+     ============================================================ */
+  var translations = {
+    en: {
+      brand_title: "Malaysia Athlete Talent Hub",
+      brand_sub: "Malaysia Sports Registry",
+      nav_home: "Home", nav_about: "About System", nav_sports: "Sports Categories",
+      nav_certify: "Certify", nav_update: "Update Performance", nav_register: "Register Now",
+
+      home_eyebrow: "National Athlete Database",
+      home_h1: 'Every Athlete.<br>One Official<br><span class="accent">Record.</span>',
+      home_lede: "Register, track and manage your sporting profile in one central system — from the school field to the international arena. Built for athletes, coaches and national sports associations.",
+      btn_how: "How It Works",
+      stat_sports: "Sports Categories", stat_states: "States & Federal Territories", stat_system: "Central System",
+      idcard_tag: "Registration Open",
+      idcard_fed: 'Athlete ID<span>Malaysia Sports Registry</span>',
+      idcard_season: '2026<span>Season</span>',
+      idcard_name: "Your Name Here", idcard_role: "Category · Selected on registration",
+      idcard_no: "No. 000-0000", idcard_verified: "Verified",
+
+      home_about_eyebrow: "About the System", home_about_h2: "One System, Every Level of Sport.",
+      home_about_p: "Malaysia Athlete Database stores profiles, achievement records and registration status in one platform accessible to sports associations, coaches and state sports authorities.",
+      f1_h3: "Central Profile", f1_p: "Every athlete holds one official profile across sports categories, competition levels and performance history.",
+      f2_h3: "Verified Records", f2_p: "Data is reviewed and confirmed by the relevant governing body before it enters the official database.",
+      f3_h3: "Connected Access", f3_p: "Associations and coaches can search and check athlete status by category and by state.",
+      btn_readmore: "Read More About the System",
+
+      home_sports_eyebrow: "Sports Categories", home_sports_h2: "Eight Lanes. Eight Sports.",
+      home_sports_p: "Each sport is colour-coded and carries its own registration lane — pick your category and start your athlete record.",
+
+      sport_football: "Football", sport_athletics: "Athletics", sport_swimming: "Swimming", sport_squash: "Squash",
+      sport_badminton: "Badminton", sport_karate: "Karate", sport_taekwondo: "Taekwondo", sport_hockey: "Hockey",
+
+      football_short: "School leagues to the national squad.", athletics_short: "Track, field and distance events.",
+      swimming_short: "Pool and open-water aquatic events.", squash_short: "Singles and team indoor-court play.",
+      badminton_short: "Singles, doubles and team events.", karate_short: "Kumite and kata, all age groups.",
+      taekwondo_short: "Poomsae and competitive sparring.", hockey_short: "Full field and indoor formats.",
+
+      football_long: "Player records from school leagues and state teams through to the national squad — positions, clubs and match history.",
+      athletics_long: "Covers track, field and distance events — from the 100m sprint to marathon and road-race disciplines.",
+      swimming_long: "Times, strokes and achievements for aquatic athletes, from school pools to national championships.",
+      squash_long: "Profiles for singles and team players, including rankings and indoor-court tournament entries.",
+      badminton_long: "Covers singles, doubles and team events — from academy level through to the national squad.",
+      karate_long: "Records for kumite and kata athletes by age group and competitive weight class.",
+      taekwondo_long: "Covers poomsae and sparring (kyorugi) events by weight class and belt level.",
+      hockey_long: "Player records for full-field and indoor hockey, including position and team history.",
+
+      lane01: "Lane 01", lane02: "Lane 02", lane03: "Lane 03", lane04: "Lane 04",
+      lane05: "Lane 05", lane06: "Lane 06", lane07: "Lane 07", lane08: "Lane 08",
+
+      cta_home_h2: "Ready to Get on Record?", cta_home_p: "Registration takes less than 5 minutes. Fill in the official form and our team will verify your profile.",
+      cta_sports_h2: "Found Your Lane?", cta_sports_p: "Register now and select your sports category in the official registration form.",
+      cta_about_h2: "Start Your Record Today", cta_about_p: "Register and become part of Malaysia's official athlete database.",
+      cta_reg_h2: "Already Registered?", cta_reg_p: 'Update your latest performance and achievements anytime — this step is <strong>optional</strong>, not required.',
+      btn_update_performance: "Update Performance",
+
+      about_hero_eyebrow: "About the System",
+      about_hero_h1: 'Built to Record<br><span class="accent">Every Step</span> an Athlete Takes.',
+      about_hero_lede: "Malaysia Athlete Database is a central registry that connects athletes, coaches, sports schools and national governing bodies in one verified, searchable record.",
+      about_why_eyebrow: "Why This System Exists", about_why_h2: "One Official Record, Not Scattered Files.",
+      about_why_p: "Athlete records used to be spread across paper forms, association spreadsheets and separate school systems. This system brings it all together — so an athlete's performance and achievements don't get lost between levels.",
+      fa1_h3: "For Athletes", fa1_p: "Keep one profile for your entire sporting career — from school level, to state, to national.",
+      fa2_h3: "For Coaches", fa2_p: "Check an athlete's record and readiness before team selection or programme placement.",
+      fa3_h3: "For Associations", fa3_p: "Access structured data by sport category, state and competition level for talent planning.",
+
+      about_obj_eyebrow: "System Objectives", about_obj_h2: "What This System Aims to Do.",
+      about_obj_p: "Beyond record-keeping, the database is built around a set of clear goals for athletes, coaches and associations.",
+      obj1: "Provide every athlete with one official, verified profile for their entire career.",
+      obj2: "Give coaches and associations a reliable way to check athlete status and readiness.",
+      obj3: "Track performance and achievements consistently from school level to international level.",
+      obj4: '<strong>To promote the athlete to teams and coaches</strong> — helping athletes market their talent to potential recruiters.',
+
+      about_how_eyebrow: "How It Works", about_how_h2: "Four Steps Into the Database.",
+      about_how_p: "Registration is designed to be simple — from filling in the form to your record being verified and active in the system.",
+      s1_h4: "Submit Registration", s1_p: "Complete the online form with your personal details and sports category.",
+      s2_h4: "Association Review", s2_p: "The relevant governing body reviews and confirms the submitted information.",
+      s3_h4: "Profile Activated", s3_p: "Your record is officially entered into the national database.",
+      s4_h4: "Ongoing Updates", s4_p: "Your achievements and status are kept current throughout your career.",
+
+      sports_hero_eyebrow: "Sports Categories",
+      sports_hero_h1: 'Eight Official Lanes<br><span class="accent">for Malaysian Athletes.</span>',
+      sports_hero_lede: "Every sport carries its own colour-coded lane, aligned to its governing body. Pick your category to begin registration.",
+
+      register_hero_eyebrow: "Athlete Registration", register_hero_h1: "Claim Your Lane.",
+      register_hero_lede: "You'll be taken to the official registration form to complete your athlete details.",
+      register_card_lane: "REGISTRATION LANE", register_card_h2: "Register as an Athlete",
+      register_card_p: "Registration is handled through the official Google Form. Have the following ready before you start:",
+      register_checklist1: "Full name & identification card number",
+      register_checklist2: "Sports category (Football, Athletics, Swimming, Squash, Badminton, Karate, Taekwondo or Hockey)",
+      register_checklist3: "Level of Participation (Local, State, Country & International)",
+      register_checklist4: "Contact details & coach information (if applicable)",
+      register_btn: "Open Registration Form", register_note: "Form opens in a new tab · Google Forms",
+      register_next_eyebrow: "After You Submit", register_next_h2: "What Happens Next?",
+      rn_s1_h4: "Review", rn_s1_p: "The relevant governing body reviews the information submitted.",
+      rn_s2_h4: "Confirmation", rn_s2_p: "You'll be contacted by email or phone for verification.",
+      rn_s3_h4: "Active Profile", rn_s3_p: "Your athlete record is officially entered into the database.",
+
+      update_hero_eyebrow: "For Registered Athletes",
+      update_hero_h1: 'Update Your<br><span class="accent">Performance.</span>',
+      update_hero_lede: 'Competed recently or hit a new milestone? Add it to your record — this step is <strong style="color:var(--gold-text);">optional</strong>, not required.',
+      update_card_lane: "OPTIONAL · NOT REQUIRED", update_card_h2: "Update Performance Record",
+      update_card_p: 'This form is for athletes who are <strong>already registered</strong> in the Malaysia Athlete Database and want to add competition results, achievements, or recent progress to an existing profile.',
+      update_checklist1: "Competition / tournament name & date",
+      update_checklist2: "Result or achievement (time, score, ranking, medal)",
+      update_btn: "Open Update Form", update_note: "Form opens in a new tab · Google Forms",
+      update_notreg_eyebrow: "Not Registered Yet?", update_notreg_h2: "Register First, Then Update",
+      update_notreg_p: "The performance update form is only useful once you have an official profile in the system. Not registered yet? Start here.",
+
+      certify_hero_eyebrow: "Athlete Certification", certify_hero_h1: "Get Certified.",
+      certify_hero_lede: "Official athlete certificates are issued after verification. Contact us to request yours.",
+      certify_card_lane: "CERTIFICATION LANE", certify_card_h2: "Request Your Certificate",
+      certify_card_p: "Certificates are issued directly by our team, not through an online form. To request one, call or email us with your registered athlete details. Each certificate costs RM50, payable upon verification.",
+      price_label: "Per Certificate",
+      certify_checklist1: "Full name & athlete registration number",
+      certify_checklist2: "Sports category & level of participation",
+      certify_checklist3: "Purpose of certificate (team trial, scholarship, record, etc.)",
+      certify_call_btn: "Call to Request", certify_email_btn: "Email Us",
+      certify_note: "Certificates are issued after phone/email verification · RM50 per certificate",
+      certify_how_eyebrow: "How to Get Certified", certify_how_h2: "Four Simple Steps.",
+      c_s1_h4: "Contact Us", c_s1_p: "Call or email our team with your athlete details and the certificate you need.",
+      c_s2_h4: "Verification", c_s2_p: "We verify your registration and performance record before approving the request.",
+      c_s3_h4: "Payment (RM50)", c_s3_p: "A fee of RM50 is payable per certificate once your request is verified.",
+      c_s4_h4: "Receive Certificate", c_s4_p: "Your official certificate is issued and sent to you after payment is confirmed.",
+      certify_cta_h2: "Not Registered Yet?", certify_cta_p: "You need an active athlete profile before requesting a certificate.",
+
+      footer_about_p: "A central athlete database supporting national sports development across eight major sports categories.",
+      footer_links_h5: "Links", footer_link_about: "About the System",
+      footer_contact_h5: "Contact", footer_contact_addr: "Ministry of Youth & Sports, Putrajaya",
+      footer_bottom_left: "© 2026 Malaysia Athlete Database", footer_bottom_right: "Built for National Sport"
+    },
+    ms: {
+      brand_title: "Hab Bakat Atlet Malaysia",
+      brand_sub: "Pendaftaran Sukan Malaysia",
+      nav_home: "Utama", nav_about: "Tentang Sistem", nav_sports: "Kategori Sukan",
+      nav_certify: "Sijil", nav_update: "Kemas Kini Prestasi", nav_register: "Daftar Sekarang",
+
+      home_eyebrow: "Pangkalan Data Atlet Kebangsaan",
+      home_h1: 'Setiap Atlet.<br>Satu Rekod<br><span class="accent">Rasmi.</span>',
+      home_lede: "Daftar, jejak dan urus profil sukan anda dalam satu sistem berpusat — dari padang sekolah hingga ke gelanggang antarabangsa. Dibina untuk atlet, jurulatih dan persatuan sukan kebangsaan.",
+      btn_how: "Tentang Sistem",
+      stat_sports: "Kategori Sukan", stat_states: "Negeri & Wilayah Persekutuan", stat_system: "Sistem Berpusat",
+      idcard_tag: "Pendaftaran Dibuka",
+      idcard_fed: 'ID Atlet<span>Pendaftaran Sukan Malaysia</span>',
+      idcard_season: '2026<span>Musim</span>',
+      idcard_name: "Nama Anda Di Sini", idcard_role: "Kategori · Dipilih semasa pendaftaran",
+      idcard_no: "No. 000-0000", idcard_verified: "Disahkan",
+
+      home_about_eyebrow: "Tentang Sistem", home_about_h2: "Satu Sistem, Setiap Peringkat Sukan.",
+      home_about_p: "Pangkalan Data Atlet Malaysia menyimpan profil, rekod pencapaian dan status pendaftaran dalam satu platform yang boleh diakses oleh persatuan sukan, jurulatih dan pihak berkuasa sukan negeri.",
+      f1_h3: "Profil Berpusat", f1_p: "Setiap atlet memiliki satu profil rasmi merangkumi kategori sukan, peringkat pertandingan dan sejarah prestasi.",
+      f2_h3: "Rekod Disahkan", f2_p: "Data disemak dan disahkan oleh badan induk berkenaan sebelum dimasukkan ke pangkalan data rasmi.",
+      f3_h3: "Akses Bersepadu", f3_p: "Persatuan dan jurulatih boleh mencari serta menyemak status atlet mengikut kategori dan negeri.",
+      btn_readmore: "Baca Lanjut Tentang Sistem",
+
+      home_sports_eyebrow: "Kategori Sukan", home_sports_h2: "Lapan Lorong. Lapan Sukan.",
+      home_sports_p: "Setiap sukan mempunyai kod warna dan lorong pendaftaran tersendiri — pilih kategori anda dan mulakan rekod atlet anda.",
+
+      sport_football: "Bola Sepak", sport_athletics: "Olahraga", sport_swimming: "Renang", sport_squash: "Skuasy",
+      sport_badminton: "Badminton", sport_karate: "Karate", sport_taekwondo: "Taekwondo", sport_hockey: "Hoki",
+
+      football_short: "Liga sekolah hingga skuad kebangsaan.", athletics_short: "Acara balapan, padang dan jarak jauh.",
+      swimming_short: "Acara akuatik kolam dan air terbuka.", squash_short: "Perseorangan dan berpasukan gelanggang dalam.",
+      badminton_short: "Acara perseorangan, beregu dan berpasukan.", karate_short: "Kumite dan kata, semua peringkat umur.",
+      taekwondo_short: "Poomsae dan pertarungan bertanding.", hockey_short: "Format padang penuh dan dalam dewan.",
+
+      football_long: "Rekod pemain dari liga sekolah dan pasukan negeri sehingga skuad kebangsaan — kedudukan, kelab dan sejarah perlawanan.",
+      athletics_long: "Merangkumi acara balapan, padang dan jarak jauh — dari pecut 100m hingga maraton dan acara lumba jalan raya.",
+      swimming_long: "Masa, gaya dan pencapaian atlet akuatik, dari kolam sekolah hingga kejohanan kebangsaan.",
+      squash_long: "Profil pemain perseorangan dan berpasukan, termasuk kedudukan ranking dan penyertaan kejohanan gelanggang dalam.",
+      badminton_long: "Merangkumi acara perseorangan, beregu dan berpasukan — dari peringkat akademi sehingga skuad kebangsaan.",
+      karate_long: "Rekod atlet kumite dan kata mengikut kumpulan umur dan kelas berat bertanding.",
+      taekwondo_long: "Merangkumi acara poomsae dan pertarungan (kyorugi) mengikut kelas berat dan tahap tali pinggang.",
+      hockey_long: "Rekod pemain hoki padang penuh dan dalam dewan, termasuk kedudukan dan sejarah pasukan.",
+
+      lane01: "Lorong 01", lane02: "Lorong 02", lane03: "Lorong 03", lane04: "Lorong 04",
+      lane05: "Lorong 05", lane06: "Lorong 06", lane07: "Lorong 07", lane08: "Lorong 08",
+
+      cta_home_h2: "Sedia untuk Direkodkan?", cta_home_p: "Pendaftaran mengambil masa kurang daripada 5 minit. Isi borang rasmi dan pasukan kami akan mengesahkan profil anda.",
+      cta_sports_h2: "Sudah Jumpa Lorong Anda?", cta_sports_p: "Daftar sekarang dan pilih kategori sukan anda dalam borang pendaftaran rasmi.",
+      cta_about_h2: "Mulakan Rekod Anda Hari Ini", cta_about_p: "Daftar dan menjadi sebahagian daripada pangkalan data atlet rasmi Malaysia.",
+      cta_reg_h2: "Sudah Berdaftar?", cta_reg_p: 'Kemas kini prestasi dan pencapaian terkini anda pada bila-bila masa — langkah ini adalah <strong>pilihan</strong>, bukan wajib.',
+      btn_update_performance: "Kemas Kini Prestasi",
+
+      about_hero_eyebrow: "Tentang Sistem",
+      about_hero_h1: 'Dibina untuk Merekod<br><span class="accent">Setiap Langkah</span> Atlet.',
+      about_hero_lede: "Pangkalan Data Atlet Malaysia ialah registri berpusat yang menghubungkan atlet, jurulatih, sekolah sukan dan badan induk kebangsaan dalam satu rekod yang disahkan dan boleh dicari.",
+      about_why_eyebrow: "Mengapa Sistem Ini Wujud", about_why_h2: "Satu Rekod Rasmi, Bukan Fail Berselerak.",
+      about_why_p: "Rekod atlet dahulunya tersebar dalam borang kertas, hamparan persatuan dan sistem sekolah berasingan. Sistem ini menyatukan semuanya — supaya prestasi dan pencapaian atlet tidak hilang antara peringkat.",
+      fa1_h3: "Untuk Atlet", fa1_p: "Simpan satu profil sepanjang kerjaya sukan anda — dari peringkat sekolah, negeri, hingga kebangsaan.",
+      fa2_h3: "Untuk Jurulatih", fa2_p: "Semak rekod dan kesediaan atlet sebelum pemilihan pasukan atau penempatan program.",
+      fa3_h3: "Untuk Persatuan", fa3_p: "Akses data berstruktur mengikut kategori sukan, negeri dan peringkat pertandingan untuk perancangan bakat.",
+
+      about_obj_eyebrow: "Objektif Sistem", about_obj_h2: "Matlamat Sistem Ini.",
+      about_obj_p: "Selain menyimpan rekod, pangkalan data ini dibina berdasarkan beberapa matlamat jelas untuk atlet, jurulatih dan persatuan.",
+      obj1: "Menyediakan setiap atlet satu profil rasmi yang disahkan sepanjang kerjaya mereka.",
+      obj2: "Memberi jurulatih dan persatuan cara yang boleh dipercayai untuk menyemak status dan kesediaan atlet.",
+      obj3: "Menjejak prestasi dan pencapaian secara konsisten dari peringkat sekolah hingga antarabangsa.",
+      obj4: '<strong>Mempromosikan atlet kepada pasukan dan jurulatih</strong> — membantu atlet memasarkan bakat mereka kepada bakal perekrut.',
+
+      about_how_eyebrow: "Cara Ia Berfungsi", about_how_h2: "Empat Langkah Ke Pangkalan Data.",
+      about_how_p: "Pendaftaran direka supaya mudah — dari mengisi borang hingga rekod anda disahkan dan aktif dalam sistem.",
+      s1_h4: "Hantar Pendaftaran", s1_p: "Lengkapkan borang dalam talian dengan butiran peribadi dan kategori sukan anda.",
+      s2_h4: "Semakan Persatuan", s2_p: "Badan induk berkenaan menyemak dan mengesahkan maklumat yang dihantar.",
+      s3_h4: "Profil Diaktifkan", s3_p: "Rekod anda dimasukkan secara rasmi ke dalam pangkalan data kebangsaan.",
+      s4_h4: "Kemas Kini Berterusan", s4_p: "Pencapaian dan status anda dikemas kini sepanjang kerjaya anda.",
+
+      sports_hero_eyebrow: "Kategori Sukan",
+      sports_hero_h1: 'Lapan Lorong Rasmi<br><span class="accent">untuk Atlet Malaysia.</span>',
+      sports_hero_lede: "Setiap sukan mempunyai lorong berkod warna tersendiri, selaras dengan badan induknya. Pilih kategori anda untuk mula mendaftar.",
+
+      register_hero_eyebrow: "Pendaftaran Atlet", register_hero_h1: "Rebut Lorong Anda.",
+      register_hero_lede: "Anda akan dibawa ke borang pendaftaran rasmi untuk melengkapkan butiran atlet anda.",
+      register_card_lane: "LORONG PENDAFTARAN", register_card_h2: "Daftar sebagai Atlet",
+      register_card_p: "Pendaftaran dikendalikan melalui Borang Google rasmi. Sediakan perkara berikut sebelum anda mula:",
+      register_checklist1: "Nama penuh & nombor kad pengenalan",
+      register_checklist2: "Kategori sukan (Bola Sepak, Olahraga, Renang, Skuasy, Badminton, Karate, Taekwondo atau Hoki)",
+      register_checklist3: "Peringkat Penyertaan (Tempatan, Negeri, Kebangsaan & Antarabangsa)",
+      register_checklist4: "Butiran hubungan & maklumat jurulatih (jika berkenaan)",
+      register_btn: "Buka Borang Pendaftaran", register_note: "Borang dibuka dalam tab baharu · Google Forms",
+      register_next_eyebrow: "Selepas Anda Hantar", register_next_h2: "Apa Akan Berlaku Seterusnya?",
+      rn_s1_h4: "Semakan", rn_s1_p: "Badan induk berkenaan menyemak maklumat yang dihantar.",
+      rn_s2_h4: "Pengesahan", rn_s2_p: "Anda akan dihubungi melalui e-mel atau telefon untuk pengesahan.",
+      rn_s3_h4: "Profil Aktif", rn_s3_p: "Rekod atlet anda dimasukkan secara rasmi ke dalam pangkalan data.",
+
+      update_hero_eyebrow: "Untuk Atlet Berdaftar",
+      update_hero_h1: 'Kemas Kini<br><span class="accent">Prestasi Anda.</span>',
+      update_hero_lede: 'Baru bertanding atau mencapai pencapaian baharu? Tambahkannya ke rekod anda — langkah ini adalah <strong style="color:var(--gold-text);">pilihan</strong>, bukan wajib.',
+      update_card_lane: "PILIHAN · BUKAN WAJIB", update_card_h2: "Kemas Kini Rekod Prestasi",
+      update_card_p: 'Borang ini untuk atlet yang <strong>sudah berdaftar</strong> dalam Pangkalan Data Atlet Malaysia dan ingin menambah keputusan pertandingan, pencapaian, atau kemajuan terkini ke profil sedia ada.',
+      update_checklist1: "Nama & tarikh pertandingan / kejohanan",
+      update_checklist2: "Keputusan atau pencapaian (masa, markah, ranking, pingat)",
+      update_btn: "Buka Borang Kemas Kini", update_note: "Borang dibuka dalam tab baharu · Google Forms",
+      update_notreg_eyebrow: "Belum Berdaftar Lagi?", update_notreg_h2: "Daftar Dahulu, Kemudian Kemas Kini",
+      update_notreg_p: "Borang kemas kini prestasi hanya berguna setelah anda mempunyai profil rasmi dalam sistem. Belum berdaftar? Mula di sini.",
+
+      certify_hero_eyebrow: "Persijilan Atlet", certify_hero_h1: "Dapatkan Sijil Anda.",
+      certify_hero_lede: "Sijil atlet rasmi dikeluarkan selepas pengesahan. Hubungi kami untuk memohon sijil anda.",
+      certify_card_lane: "RUANG PERSIJILAN", certify_card_h2: "Mohon Sijil Anda",
+      certify_card_p: "Sijil dikeluarkan terus oleh pasukan kami, bukan melalui borang dalam talian. Untuk memohon, hubungi kami melalui telefon atau e-mel dengan butiran atlet berdaftar anda. Setiap sijil dikenakan bayaran RM50, dibayar semasa pengesahan.",
+      price_label: "Setiap Sijil",
+      certify_checklist1: "Nama penuh & nombor pendaftaran atlet",
+      certify_checklist2: "Kategori sukan & peringkat penyertaan",
+      certify_checklist3: "Tujuan sijil (percubaan pasukan, biasiswa, rekod, dll.)",
+      certify_call_btn: "Hubungi untuk Memohon", certify_email_btn: "E-mel Kami",
+      certify_note: "Sijil dikeluarkan selepas pengesahan telefon/e-mel · RM50 setiap sijil",
+      certify_how_eyebrow: "Cara Mendapatkan Sijil", certify_how_h2: "Empat Langkah Mudah.",
+      c_s1_h4: "Hubungi Kami", c_s1_p: "Hubungi atau e-mel pasukan kami dengan butiran atlet dan sijil yang diperlukan.",
+      c_s2_h4: "Pengesahan", c_s2_p: "Kami mengesahkan pendaftaran dan rekod prestasi anda sebelum meluluskan permohonan.",
+      c_s3_h4: "Bayaran (RM50)", c_s3_p: "Bayaran RM50 dikenakan bagi setiap sijil setelah permohonan anda disahkan.",
+      c_s4_h4: "Terima Sijil", c_s4_p: "Sijil rasmi anda dikeluarkan dan dihantar selepas bayaran disahkan.",
+      certify_cta_h2: "Belum Berdaftar Lagi?", certify_cta_p: "Anda memerlukan profil atlet yang aktif sebelum memohon sijil.",
+
+      footer_about_p: "Pangkalan data atlet berpusat yang menyokong pembangunan sukan negara merentasi lapan kategori sukan utama.",
+      footer_links_h5: "Pautan", footer_link_about: "Tentang Sistem",
+      footer_contact_h5: "Hubungi", footer_contact_addr: "Kementerian Belia & Sukan, Putrajaya",
+      footer_bottom_left: "© 2026 Pangkalan Data Atlet Malaysia", footer_bottom_right: "Dibina untuk Sukan Negara"
+    }
+  };
+
+  function applyLang(lang) {
+    var dict = translations[lang];
+    if (!dict) return;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-html');
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('[data-href-en][data-href-ms]').forEach(function (el) {
+      var url = lang === 'ms' ? el.getAttribute('data-href-ms') : el.getAttribute('data-href-en');
+      if (url) el.setAttribute('href', url);
+    });
+    document.documentElement.setAttribute('lang', lang === 'ms' ? 'ms' : 'en');
+    document.querySelectorAll('.lang-btn').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+    });
+  }
+</script>
+
+<!-- ============ FIREBASE ============ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBIG_STo6mRsRNRuNdiIc1fz6rayl7rIGs",
+    authDomain: "malaysia-sports-talent-hub.firebaseapp.com",
+    databaseURL: "https://malaysia-sports-talent-hub-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "malaysia-sports-talent-hub",
+    storageBucket: "malaysia-sports-talent-hub.firebasestorage.app",
+    messagingSenderId: "736579061209",
+    appId: "1:736579061209:web:7383c9403235fdc5d605c8",
+    measurementId: "G-E6F3EY1CVT"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getDatabase(app);
+
+  // Dedahkan untuk kegunaan skrip lain jika perlu
+  window.firebaseApp = app;
+  window.firebaseDB = db;
+</script>
+
+</body>
+</html>
